@@ -4,6 +4,10 @@ description: 'Install and run clang-tidy'
 runs:
   using: "composite"
   steps:
+    - name: Install Linux Dependencies
+      if: runner.os == 'Linux'
+      uses: ./.github/actions/install-linux-depends
+    
     - name: Setup compiler env vars
       shell: bash
       run: |
