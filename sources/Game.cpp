@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "../headers/Track.h"
-#include "../headers/menu.h"
+#include "../headers/Menu.h"
 
 sf::RenderWindow &Game::getWindow() {
     static sf::RenderWindow window;
