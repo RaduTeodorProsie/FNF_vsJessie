@@ -1,6 +1,6 @@
 #include "../headers/Menu.h"
 #include <SFML/Graphics.hpp>
-
+#include "../headers/Game.h"
 sf::String Menu::getOption() const {
     std::vector<sf::Text> opt;
     const sf::Font playful("../assets/fonts/playful.ttf");
@@ -39,4 +39,5 @@ sf::String Menu::getOption() const {
             window.display();
         }
     }
+    return sf::String();
 }
