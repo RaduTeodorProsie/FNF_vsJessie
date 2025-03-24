@@ -9,13 +9,14 @@ class Track {
     sf::Music instrumental, voices;
 
     void pause();
+    void restart();
     void game_loop();
 
 public:
     explicit Track(const std::string &_title, bool empty = false);
     Track() = default;
 
-    void start(sf::RenderWindow &window);
+    void start();
 
     [[nodiscard]] sf::String get_title() const;
 

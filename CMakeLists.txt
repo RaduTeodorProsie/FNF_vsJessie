@@ -51,6 +51,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         headers/Track.h
         sources/Game.cpp
         sources/Track.cpp
+        sources/Menu.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

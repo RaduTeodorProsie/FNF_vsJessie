@@ -5,15 +5,14 @@
 #include <memory>
 #include <vector>
 #include "Track.h"
-// #include "InputHandler.h"
 
 class Game {
-    sf::RenderWindow window;
     std::vector<std::unique_ptr<Track>> tracks;
 
 public:
     Game();
     void start();
+    static sf::RenderWindow &getWindow();
 };
 
 #endif // GAME_H
