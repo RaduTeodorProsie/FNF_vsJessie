@@ -25,10 +25,10 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_Declare(
         SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG        3.0.0
+        GIT_TAG 3.0.0
         # GIT_TAG        69ea0cd863aed1d4092b970b676924a716ff718b # 2.6.1
         # GIT_TAG        origin/master
-        GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
+        GIT_SHALLOW 1  # works only with branches or tags, not with arbitrary commit hashes
         EXCLUDE_FROM_ALL
         SYSTEM)
 
@@ -45,8 +45,12 @@ FetchContent_MakeAvailable(SFML)
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${MAIN_EXECUTABLE_NAME}
-    main.cpp
-    generated/src/Helper.cpp
+        main.cpp
+        generated/src/Helper.cpp
+        headers/Game.h
+        headers/Track.h
+        sources/Game.cpp
+        sources/Track.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
@@ -61,7 +65,7 @@ set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE generated/include)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)
+target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio)
 # target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 # target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
 # target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
@@ -72,9 +76,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics)
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
 install(TARGETS ${MAIN_EXECUTABLE_NAME} DESTINATION ${DESTINATION_DIR})
-if(APPLE)
+if (APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
-endif()
+endif ()
 
 copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
