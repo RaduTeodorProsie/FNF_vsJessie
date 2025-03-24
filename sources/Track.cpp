@@ -1,8 +1,7 @@
 #include "../headers/Track.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-Track::Track(const std::string _title, bool empty) {
-    title = _title;
+Track::Track(const std::string &_title, const bool empty) : title(_title) {
     if (!empty) {
         bool open1 = instrumental.openFromFile("../assets/music/" + _title + "/Inst.ogg");
         bool open2 = voices.openFromFile("../assets/music/" + _title + "/Voices.ogg");

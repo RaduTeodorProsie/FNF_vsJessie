@@ -17,7 +17,7 @@ void Game::start() {
     sf::Font playful("../assets/fonts/playful.ttf");
     std::vector<sf::Text> track_names;
     const int px_sz = 128;
-    for (auto &track: tracks) {
+    for (const auto &track: tracks) {
         track_names.emplace_back(playful, track->get_title());
         track_names.back().setCharacterSize(px_sz);
         track_names.back().setFillColor(sf::Color::White);
