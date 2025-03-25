@@ -19,7 +19,7 @@ Track::Track(const std::string &title, const bool empty) : title(title) {
         bool open2 = voices.openFromFile("../assets/music/" + title + "/Voices.mp3");
 
         if (!open1 || !open2) {
-            throw std::runtime_error("Failed to load audio files for track: " + title);
+            //throw std::runtime_error("Failed to load audio files for track: " + title);
         }
     }
 }
