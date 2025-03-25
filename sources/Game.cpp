@@ -20,7 +20,7 @@ Game::Game() {
 }
 
 void Game::start() {
-    std::vector<sf::String> track_names;
+    std::vector<sf::String> track_names; track_names.reserve(tracks.size() + 1);
     for (const auto &track: tracks) {
         track_names.emplace_back(track->get_title());
     }

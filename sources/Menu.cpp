@@ -12,7 +12,7 @@ sf::String Menu::getOption() const {
     }
 
     sf::RenderWindow &window = Game::getWindow();
-    int current_option = 0;
+    std::vector<sf::Text>::size_type current_option = 0;
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -23,7 +23,7 @@ sf::String Menu::getOption() const {
                 if (keyEvent->scancode == sf::Keyboard::Scan::Enter) return options[current_option];
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-                current_option = (current_option - 1 + opt.size()) % opt.size();
+                current_option = (current_option - 1 + options.size()) % options.size();
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) current_option = (current_option + 1) % opt.size();
 
@@ -39,5 +39,5 @@ sf::String Menu::getOption() const {
             window.display();
         }
     }
-    return sf::String();
+    return {};
 }
