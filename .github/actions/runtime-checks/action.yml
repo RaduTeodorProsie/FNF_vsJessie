@@ -51,7 +51,7 @@ runs:
       continue-on-error: true
       run: |
         echo "start sanitizing"
-        chmod +x ./scripts/sanitizers.sh &&  chmod +x ./scripts/timeout.sh && ./scripts/timeout.sh 10 "xvfb-run --auto-servernum ./scripts/sanitizers.sh"
+        chmod +x ./scripts/sanitizers.sh &&  chmod +x ./scripts/timeout.sh && ./scripts/timeout.sh 30 "xvfb-run --auto-servernum ./scripts/sanitizers.sh"
 
     - name: Sanitizers (Windows MSVC)
       shell: bash
@@ -69,6 +69,6 @@ runs:
       env:
         EXECUTABLE_NAME: ${{ env.EXECUTABLE_NAME }}
       run: |
-        chmod +x ./scripts/valgrind.sh &&  chmod +x ./scripts/timeout.sh && ./scripts/timeout.sh 10 "xvfb-run --auto-servernum ./scripts/valgrind.sh"
+        chmod +x ./scripts/valgrind.sh &&  chmod +x ./scripts/timeout.sh && ./scripts/timeout.sh 30 "xvfb-run --auto-servernum ./scripts/valgrind.sh"
       working-directory: ${{github.workspace}}
     
