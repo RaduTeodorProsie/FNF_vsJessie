@@ -1,2 +1,4 @@
 generated/** linguist-generated
 ext/** linguist-vendored
+*.mp3 binary
+*.ttf binary
