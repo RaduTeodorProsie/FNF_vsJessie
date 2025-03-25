@@ -13,8 +13,7 @@ class Track {
     void game_loop();
 
 public:
-    explicit Track(const std::string &_title, bool empty = false);
-    Track() = default;
+    explicit Track(const std::string &title);
 
     void start();
 

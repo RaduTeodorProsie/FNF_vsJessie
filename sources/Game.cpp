@@ -1,8 +1,8 @@
 #include "../headers/Game.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "../headers/Track.h"
 #include "../headers/Menu.h"
+#include "../headers/Track.h"
 
 sf::RenderWindow &Game::getWindow() {
     static sf::RenderWindow window;
@@ -17,7 +17,6 @@ Game::Game() {
     tracks.push_back(std::make_unique<Track>("Vs Maria"));
     tracks.push_back(std::make_unique<Track>("Vs Beatrice"));
     tracks.push_back(std::make_unique<Track>("Vs Jessie"));
-    tracks.push_back(std::make_unique<Track>("Exit Game", true));
 }
 
 void Game::start() {
@@ -26,18 +25,18 @@ void Game::start() {
         track_names.emplace_back(track->get_title());
     }
 
+    track_names.emplace_back("Exit Game");
     while (getWindow().isOpen()) {
         Menu main_menu(track_names);
         const sf::String want = main_menu.getOption();
-        auto trackp = std::find_if(tracks.begin(), tracks.end(),
-                                   [&want](const std::unique_ptr<Track> &track) { return track->get_title() == want; });
 
-        if ((*trackp)->get_title() == "Exit Game") {
+        if (want == "Exit Game") {
             getWindow().close();
-
             return;
         }
 
+        auto trackp = std::find_if(tracks.begin(), tracks.end(),
+                                   [&want](const std::unique_ptr<Track> &track) { return track->get_title() == want; });
         (*trackp)->start();
     }
 }
