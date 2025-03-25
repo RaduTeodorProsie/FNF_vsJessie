@@ -48,7 +48,6 @@ runs:
       # detect_leaks is not supported on macOS
       # env:
       #   ASAN_OPTIONS: detect_leaks=1
-      continue-on-error: true
       run: |
         echo "start sanitizing"
         chmod +x ./scripts/sanitizers.sh &&  chmod +x ./scripts/timeout.sh && ./scripts/timeout.sh 30 "xvfb-run --auto-servernum ./scripts/sanitizers.sh"
@@ -57,7 +56,6 @@ runs:
       shell: bash
       # run one sanitizer for each OS to avoid building extra binaries
       if: matrix.cxx == 'cl' && matrix.runs_asan == true
-      continue-on-error: true
       env:
         EXECUTABLE_NAME: ${{ env.EXECUTABLE_NAME }}
       run: |
