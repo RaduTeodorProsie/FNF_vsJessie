@@ -17,11 +17,11 @@ Track::Track(const std::string &title, const bool empty) : title(title) {
     if (!empty) {
         bool open1 = instrumental.openFromFile("../assets/music/" + title + "/Inst.mp3");
         bool open2 = voices.openFromFile("../assets/music/" + title + "/Voices.mp3");
-
+/*
         if (!open1 || !open2) {
-            //throw std::runtime_error("Failed to load audio files for track: " + title);
+            throw std::runtime_error("Failed to load audio files for track: " + title);
         }
-    }
+    }*/
 }
 
 sf::String Track::get_title() const { return title; }
