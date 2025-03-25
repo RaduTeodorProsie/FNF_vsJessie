@@ -25,5 +25,7 @@ runs:
           libxcb-render-util0 \
           libxcb-xinerama0 \
           libxcb-xfixes0 \
-          xdotool
+          xdotool \
+          libopenal1 \
+          libvorbisfile3
       shell: bash
