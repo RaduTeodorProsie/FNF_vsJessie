@@ -21,7 +21,7 @@ include(cmake/CompilerFlags.cmake)
 include(cmake/CopyHelper.cmake)
 
 include(FetchContent)
-set(FETCHCONTENT_QUIET OFF)
+set(FETCH CONTENT_QUIET OFF)
 FetchContent_Declare(
         SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
