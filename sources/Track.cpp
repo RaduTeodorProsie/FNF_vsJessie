@@ -17,7 +17,8 @@ Track::Track(const std::string &title) : title(title) {
     const bool open1 = instrumental.openFromFile("assets/music/" + title + "/Inst.ogg");
 
     if (const bool open2 = voices.openFromFile("assets/music/" + title + "/Voices.ogg");!open1 || !open2) {
-        throw std::runtime_error("Failed to load audio files for track: " + title);
+        if(!open1) throw std::runtime_error("Failed to load audio files for track instrumentals: " + title);
+        throw std::runtime_error("Failed to load audio files for track voices: " + title);
     }
 }
 
