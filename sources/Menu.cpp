@@ -3,7 +3,7 @@
 #include "../headers/Game.h"
 sf::String Menu::getOption() const {
     std::vector<sf::Text> opt;
-    const sf::Font playful("../assets/fonts/playful.ttf");
+    const sf::Font playful("assets/fonts/playful.ttf");
     for (const auto &option: options) {
         opt.emplace_back(playful, option);
         opt.back().setCharacterSize(px_sz);

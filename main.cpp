@@ -3,7 +3,7 @@
 int main() {
     
     Game game;
-    game.start(); ///apt?
+    game.start();
     
     return 0;
 }
