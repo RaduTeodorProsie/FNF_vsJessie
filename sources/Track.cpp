@@ -1,8 +1,9 @@
 #include "../headers/Track.h"
 #include <SFML/Audio.hpp>
- #include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "../headers/Game.h"
 #include "../headers/Menu.h"
+#include "../headers/exceptions.h"
 
 void Track::restart() {
     instrumental.stop();
@@ -17,8 +18,8 @@ Track::Track(const std::string &title) : title(title) {
     const bool open1 = instrumental.openFromFile("assets/music/" + title + "/Inst.ogg");
 
     if (const bool open2 = voices.openFromFile("assets/music/" + title + "/Voices.ogg");!open1 || !open2) {
-        if(!open1) throw std::runtime_error("Failed to load audio files for track instrumentals: " + title);
-        throw std::runtime_error("Failed to load audio files for track voices: " + title);
+        if(!open1) throw AssetException("Failed to load audio files for track instrumentals: " + title);
+        throw AssetException("Failed to load audio files for track voices: " + title);
     }
 }
 
@@ -43,8 +44,9 @@ void Track::start() {
                     instrumental.pause();
 
                     Menu pause_menu({"Resume", "Restart", "Main Menu", "Exit Game"});
-
-                    if (const sf::String want = pause_menu.getOption(); want == "Resume") {
+                    const std::optional<sf::String> want = pause_menu.getOption();
+                    if (!want.has_value()) return;
+                    if (want == "Resume") {
                         voices.play();
                         instrumental.play();
                     }

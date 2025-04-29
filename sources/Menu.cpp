@@ -1,9 +1,17 @@
 #include "../headers/Menu.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "../headers/Game.h"
-sf::String Menu::getOption() const {
+#include "../headers/exit_codes.h"
+#include <optional>
+std::optional<sf::String> Menu::getOption() const {
     std::vector<sf::Text> opt;
-    const sf::Font playful("assets/fonts/playful.ttf");
+    sf::Font playful;
+    if (!playful.openFromFile("assets/fonts/playful.ttf")) {
+        std::cerr << "Error loading fonts" << std::endl;
+        std::exit(static_cast<int>(ExitCode::ASSET_ERROR));
+    }
+
     for (const auto &option: options) {
         opt.emplace_back(playful, option);
         opt.back().setCharacterSize(px_sz);
@@ -39,5 +47,6 @@ sf::String Menu::getOption() const {
             window.display();
         }
     }
-    return {};
+
+    return std::nullopt;
 }
