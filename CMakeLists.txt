@@ -55,6 +55,11 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         sources/exceptions.cpp
         headers/exceptions.h
         headers/exit_codes.h
+        xml-parser/pugixml.cpp
+        xml-parser/pugixml.hpp
+        xml-parser/loadAtlas.cpp
+        headers/SpriteData.h
+        xml-parser/loadAtlas.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

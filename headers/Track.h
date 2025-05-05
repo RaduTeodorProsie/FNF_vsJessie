@@ -16,6 +16,7 @@ public:
     explicit Track(const std::string &title);
 
     void start();
+    static void play_intro();
 
     [[nodiscard]] sf::String get_title() const;
 

@@ -13,7 +13,7 @@ public:
     explicit Menu(const std::vector<sf::String> &options, const int px_sz = 128) : options(options), px_sz(px_sz) {}
     explicit Menu() : options({"Exit Game"}), px_sz(128){}
 
-    std::optional<sf::String> getOption() const;
+    [[nodiscard]] std::optional<sf::String> getOption() const;
 };
 
 #endif // MENU_H
