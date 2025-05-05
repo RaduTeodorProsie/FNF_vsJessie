@@ -1,12 +1,14 @@
-#include "../headers/Track.h"
+#include "../headers/track.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include "../headers/Game.h"
+#include <iostream>
+#include <ranges>
 #include "../headers/Menu.h"
 #include "../headers/exceptions.h"
-#include "../xml-parser/loadAtlas.h"
+#include "../headers/game.h"
+#include "../headers/lane.h"
 
-Track::Track(const std::string &title) : title(title) {
+track::track(const std::string &title) : title(title) {
     const bool open1 = instrumental.openFromFile("assets/music/" + title + "/Inst.ogg");
 
     if (const bool open2 = voices.openFromFile("assets/music/" + title + "/Voices.ogg"); !open1 || !open2) {
@@ -15,56 +17,56 @@ Track::Track(const std::string &title) : title(title) {
     }
 }
 
-sf::String Track::get_title() const { return title; }
+sf::String track::get_title() const { return title; }
 
-void Track::play_intro() {
+void track::play_intro() {
 
     std::vector<sf::SoundBuffer> buffers;
     buffers.resize(3);
     for (int i = 3; i >= 1; --i) {
-        std::string filename = "assets/shared/intro/intro" + std::to_string(i) + ".ogg";
-        if (!buffers[buffers.size() - i].loadFromFile(filename)) {
+        if (std::string filename = "assets/shared/intro/intro" + std::to_string(i) + ".ogg";
+            !buffers[buffers.size() - i].loadFromFile(filename)) {
             throw AssetException("Failed to load audio file for track intro: " + filename);
         }
     }
 
     buffers.emplace_back();
-    std::string goFilename = "assets/shared/intro/introGo.ogg";
-    if (!buffers.back().loadFromFile(goFilename)) {
+    if (const std::string goFilename = "assets/shared/intro/introGo.ogg"; !buffers.back().loadFromFile(goFilename)) {
         throw AssetException("Failed to load GO for the track intro: " + goFilename);
     }
 
     std::vector<sf::Sound> sounds;
     sounds.reserve(buffers.size());
-    for (const auto &buffer : buffers) {
+    for (const auto &buffer: buffers) {
         sounds.emplace_back(buffer);
     }
 
     std::vector<sf::Texture> textures;
     std::vector<std::string> names = {"ready.png", "set.png", "go.png"};
     try {
-        for (const auto &name : names) {
+        for (const auto &name: names) {
             textures.emplace_back();
             if (!textures.back().loadFromFile("assets/shared/intro/" + name)) {
                 throw AssetException("Failed to load texture: " + name);
             }
         }
-    } catch (const AssetException &e) {
+    }
+    catch (const AssetException &e) {
         std::cerr << e.what() << std::endl;
-        throw ;
+        throw;
     }
 
     std::vector<sf::Sprite> sprites;
-    for (const auto &texture : textures) {
+    for (const auto &texture: textures) {
         sprites.emplace_back(texture);
     }
 
-    sf::RenderWindow &window = Game::getWindow();
+    sf::RenderWindow &window = game::getWindow();
     const sf::Vector2u windowSize = window.getSize();
-    float windowCenterX = static_cast<float>(windowSize.x) / 2.0f;
-    float windowCenterY = static_cast<float>(windowSize.y) / 2.0f;
+    const float windowCenterX = static_cast<float>(windowSize.x) / 2.0f;
+    const float windowCenterY = static_cast<float>(windowSize.y) / 2.0f;
 
-    for (auto &sprite : sprites) {
+    for (auto &sprite: sprites) {
         const auto poz = sf::Vector2f(sprite.getTextureRect().size);
         const float originX = poz.x / 2.0f;
         const float originY = poz.y / 2.0f;
@@ -96,7 +98,8 @@ void Track::play_intro() {
             if (currentPlayIndex < sounds.size()) {
                 sounds[currentPlayIndex].play();
                 timer.restart();
-            } else {
+            }
+            else {
                 break;
             }
         }
@@ -109,7 +112,7 @@ void Track::play_intro() {
     }
 }
 
-void Track::restart() {
+void track::restart() {
     play_intro();
     instrumental.stop();
     voices.stop();
@@ -119,16 +122,12 @@ void Track::restart() {
     voices.play();
 }
 
-void Track::start() {
-    sf::RenderWindow &window = Game::getWindow();
-
-    /*auto [test, path] = parseTextureAtlasPugi("assets/shared/notes/notes.xml");
-    path = "assets/shared/notes/" + path;
-    sf::Texture notes(path);
-    sf::Sprite down(notes, test["down confirm0001"].get_texture_rect());*/
+void track::start() {
+    sf::RenderWindow &window = game::getWindow();
 
     restart();
-    while (window.isOpen()) {
+    std::map<sf::Keyboard::Key, lane> lanes = {{sf::Keyboard::Key::D, lane("down", 200)}};
+    while (window.isOpen() && instrumental.getStatus() != sf::SoundSource::Status::Stopped) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
@@ -142,7 +141,7 @@ void Track::start() {
                     voices.pause();
                     instrumental.pause();
 
-                    Menu pause_menu({"Resume", "Restart", "Main Menu", "Exit Game"});
+                    menu pause_menu({"Resume", "Restart", "Main menu", "Exit game"});
                     const std::optional<sf::String> want = pause_menu.getOption();
                     if (!want.has_value()) return;
                     if (want == "Resume") {
@@ -153,10 +152,10 @@ void Track::start() {
                     else if (want == "Restart")
                         restart();
 
-                    else if (want == "Exit Game")
+                    else if (want == "Exit game")
                         window.close();
 
-                    else if (want == "Main Menu") {
+                    else if (want == "Main menu") {
                         voices.stop();
                         instrumental.stop();
 
@@ -169,6 +168,10 @@ void Track::start() {
         if (!window.isOpen()) continue;
 
         window.clear();
+        for (const auto &lane: lanes | std::views::values) {
+            lane.draw();
+        }
+
         window.display();
     }
 }

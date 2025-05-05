@@ -3,13 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 
-class SpriteData {
+class spriteData {
     sf::IntRect textureRect;
-    int frameX, frameY, frameWidth, frameHeight;
+    int frameX{}, frameY{}, frameWidth{}, frameHeight{};
 
 public:
-    SpriteData() = default;
-    SpriteData(const int x, const int y, const int width, const int height, const int frameX, const int frameY,
+    spriteData() = default;
+    spriteData(const int x, const int y, const int width, const int height, const int frameX, const int frameY,
                const int frameWidth, const int frameHeight)
         : textureRect(sf::IntRect({x, y}, {width, height})), frameX(frameX), frameY(frameY), frameWidth(frameWidth),
           frameHeight(frameHeight) {}

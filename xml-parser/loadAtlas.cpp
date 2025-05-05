@@ -2,10 +2,10 @@
 #include "pugixml.hpp"
 #include "../headers/exceptions.h"
 
-std::pair<std::map<std::string, SpriteData>, std::string> parseTextureAtlasPugi(const std::string &xmlPath) {
+std::map<std::string, spriteData> parseTextureAtlasPugi(const std::string &xmlPath) {
     pugi::xml_document doc;
     std::string outTextureFilename;
-    std::map<std::string, SpriteData> resultMap;
+    std::map<std::string, spriteData> resultMap;
     outTextureFilename.clear();
 
     pugi::xml_parse_result result = doc.load_file(xmlPath.c_str());
@@ -75,16 +75,16 @@ std::pair<std::map<std::string, SpriteData>, std::string> parseTextureAtlasPugi(
             continue;
         }
 
-        SpriteData data;
+        spriteData data;
         data.set_texture_rect(sf::IntRect({x, y}, {width, height}));
 
-        resultMap[name] = SpriteData(x, y, width, height, frameX, frameY, frameWidth, frameHeight);
+        resultMap[name] = spriteData(x, y, width, height, frameX, frameY, frameWidth, frameHeight);
         count++;
     }
 
 
     std::cout << "Successfully parsed " << count << " <SubTexture> elements." << std::endl;
 
-    return {resultMap, outTextureFilename};
+    return resultMap;
 }
 

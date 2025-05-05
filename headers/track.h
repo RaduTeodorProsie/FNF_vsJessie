@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
-class Track {
+class track {
     sf::String title;
     sf::Music instrumental, voices;
 
@@ -13,7 +13,7 @@ class Track {
     void game_loop();
 
 public:
-    explicit Track(const std::string &title);
+    explicit track(const std::string &title);
 
     void start();
     static void play_intro();
@@ -21,8 +21,8 @@ public:
     [[nodiscard]] sf::String get_title() const;
 
     /// SFML music is not copyable so we ought to make this class not copyable as well
-    Track(const Track &) = delete;
-    Track &operator=(const Track &) = delete;
+    track(const track &) = delete;
+    track &operator=(const track &) = delete;
 };
 
 #endif // TRACK_H

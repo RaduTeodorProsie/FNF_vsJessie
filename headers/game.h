@@ -4,13 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-#include "Track.h"
+#include "track.h"
 
-class Game {
-    std::vector<std::unique_ptr<Track>> tracks;
+class game {
+    std::vector<std::unique_ptr<track>> tracks;
 
 public:
-    Game();
+    game();
     void start();
     static sf::RenderWindow &getWindow();
 };

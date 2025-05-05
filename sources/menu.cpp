@@ -1,10 +1,10 @@
 #include "../headers/Menu.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../headers/Game.h"
+#include "../headers/game.h"
 #include "../headers/exit_codes.h"
 #include <optional>
-std::optional<sf::String> Menu::getOption() const {
+std::optional<sf::String> menu::getOption() const {
     std::vector<sf::Text> opt;
     sf::Font playful;
     if (!playful.openFromFile("assets/fonts/playful.ttf")) {
@@ -19,7 +19,7 @@ std::optional<sf::String> Menu::getOption() const {
         opt.back().setPosition({0, static_cast<float>(px_sz * (opt.size() - 1))});
     }
 
-    sf::RenderWindow &window = Game::getWindow();
+    sf::RenderWindow &window = game::getWindow();
     std::vector<sf::Text>::size_type current_option = 0;
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {

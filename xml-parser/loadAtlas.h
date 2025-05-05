@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <map>
-#include "../headers/SpriteData.h"
+#include "../headers/spriteData.h"
 #include "pugixml.hpp"
 
-std::pair<std::map<std::string, SpriteData>, std::string> parseTextureAtlasPugi(const std::string &xmlPath);
+std::map<std::string, spriteData> parseTextureAtlasPugi(const std::string &xmlPath);
 
 #endif //LOADATLAS_H

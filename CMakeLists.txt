@@ -47,19 +47,24 @@ FetchContent_MakeAvailable(SFML)
 add_executable(${MAIN_EXECUTABLE_NAME}
         main.cpp
         generated/src/Helper.cpp
-        headers/Game.h
-        headers/Track.h
-        sources/Game.cpp
-        sources/Track.cpp
-        sources/Menu.cpp
+        headers/game.h
+        headers/track.h
+        sources/game.cpp
+        sources/track.cpp
+        sources/menu.cpp
         sources/exceptions.cpp
         headers/exceptions.h
         headers/exit_codes.h
         xml-parser/pugixml.cpp
         xml-parser/pugixml.hpp
         xml-parser/loadAtlas.cpp
-        headers/SpriteData.h
+        headers/spriteData.h
         xml-parser/loadAtlas.h
+        sources/lane.cpp
+        headers/lane.h
+        headers/simpleNote.h
+        headers/poisonNote.h
+        headers/HeartNote.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

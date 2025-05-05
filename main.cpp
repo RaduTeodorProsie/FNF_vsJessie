@@ -1,8 +1,8 @@
-#include "headers/Game.h"
+#include "headers/game.h"
 
 int main() {
 
-    Game game;
+    game game;
     game.start();
 
     return 0;
