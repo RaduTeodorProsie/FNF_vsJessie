@@ -7,10 +7,10 @@
 class track {
     sf::String title;
     sf::Music instrumental, voices;
+    sf::Clock clock;
 
     void pause();
     void restart();
-    void game_loop();
 
 public:
     explicit track(const std::string &title);

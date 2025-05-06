@@ -3,17 +3,14 @@
 
 #include "note.h"
 #include "SFML/Audio/Sound.hpp"
+#include "exceptions.h"
 
 class poisonNote : public note{
-    static sf::Sound hitSound;
 public:
     explicit poisonNote(const sf::Texture &texture) : note{texture} {}
-    void hit() const override{
-        hitSound.play();
-    }
 
-    static sf::Sound &getHitSound() {
-        return hitSound;
+    void hit() const override{
+
     }
 
 };

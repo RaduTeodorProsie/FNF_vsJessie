@@ -114,6 +114,7 @@ void track::play_intro() {
 
 void track::restart() {
     play_intro();
+    clock.restart();
     instrumental.stop();
     voices.stop();
     instrumental.setPlayingOffset(sf::Time::Zero);
@@ -123,55 +124,69 @@ void track::restart() {
 }
 
 void track::start() {
-    sf::RenderWindow &window = game::getWindow();
+    sf::RenderWindow& window = game::getWindow();
+    sf::Clock clock;
+
+    constexpr int gap = 150, start = 1100;
+    std::map<sf::Keyboard::Key, lane> lanes = {
+        {sf::Keyboard::Key::D, lane("left",  start)},
+        {sf::Keyboard::Key::F, lane("down",  start + gap)},
+        {sf::Keyboard::Key::J, lane("up",    start + 2*gap)},
+        {sf::Keyboard::Key::K, lane("right", start + 3*gap)}
+    };
 
     restart();
-    std::map<sf::Keyboard::Key, lane> lanes = {{sf::Keyboard::Key::D, lane("down", 200)}};
+    lanes.at(sf::Keyboard::Key::D).addNote<poisonNote>();
+
     while (window.isOpen() && instrumental.getStatus() != sf::SoundSource::Status::Stopped) {
-        while (const std::optional event = window.pollEvent()) {
+        while (auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J)) voices.setVolume(0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)) voices.setVolume(100);
-
-            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-                if (keyPressed->scancode == sf::Keyboard::Scan::Escape) {
+            if (event->is<sf::Event::KeyPressed>()) {
+                auto code = event->getIf<sf::Event::KeyPressed>()->code;
+                auto it = lanes.find(code);
+                if (it != lanes.end()) {
+                    it->second.addNote<simpleNote>();
+                    it->second.press();
+                }
+                if (code == sf::Keyboard::Key::Escape) {
                     voices.pause();
                     instrumental.pause();
-
-                    menu pause_menu({"Resume", "Restart", "Main menu", "Exit game"});
-                    const std::optional<sf::String> want = pause_menu.getOption();
-                    if (!want.has_value()) return;
-                    if (want == "Resume") {
+                    menu pause_menu({"Resume","Restart","Main menu","Exit game"});
+                    auto choice = pause_menu.getOption();
+                    if (!choice) return;
+                    if (*choice == "Resume") {
                         voices.play();
                         instrumental.play();
-                    }
-
-                    else if (want == "Restart")
+                    } else if (*choice == "Restart") {
                         restart();
-
-                    else if (want == "Exit game")
+                    } else if (*choice == "Exit game") {
                         window.close();
-
-                    else if (want == "Main menu") {
+                    } else if (*choice == "Main menu") {
                         voices.stop();
                         instrumental.stop();
-
                         return;
                     }
                 }
+            }
+            else if (event->is<sf::Event::KeyReleased>()) {
+                auto code = event->getIf<sf::Event::KeyReleased>()->code;
+                auto it = lanes.find(code);
+                if (it != lanes.end())
+                    it->second.release();
             }
         }
 
         if (!window.isOpen()) continue;
 
+        sf::Time dt = clock.restart();
         window.clear();
-        for (const auto &lane: lanes | std::views::values) {
-            lane.draw();
+        for (auto& ln : lanes | std::views::values) {
+            ln.update(dt);
+            ln.draw();
         }
-
         window.display();
     }
 }
+
