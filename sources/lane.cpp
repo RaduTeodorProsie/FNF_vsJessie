@@ -3,10 +3,9 @@
 #include "../headers/lane.h"
 
 
-
-std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> &lane::getSpriteData() {
-    static std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> notes;
-    return notes;
+inline std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> &lane::getSpriteData() {
+    static std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> xmlInfo;
+    return xmlInfo;
 }
 
 lane::lane(const std::string& name, const int X) : name(name),judge(getSpriteData()[0].first) {
@@ -28,14 +27,15 @@ void lane::update(const sf::Time &dt) {
         note->move({0, static_cast<float>(dt.asMilliseconds() * pxPerMsec)});
     }
 
-    while (!currentNotes.empty() && currentNotes.front()->getPosition().y > 1920) {
-        std::cout << "popped" << std::endl;
+    while (!currentNotes.empty() && currentNotes.front()->getPosition().y > 1080) {
         currentNotes.pop_front();
     }
 }
 
 void lane::press() {
-    judge.setTextureRect(getSpriteData()[0].second[name + " confirm0001"].get_texture_rect());
+    const spriteData &data = getSpriteData()[0].second[name + " press0001"];
+    judge.setTextureRect(data.get_texture_rect());
+    //judge.move({static_cast<float>(data.get_frame_x()), 2 * static_cast<float>(data.get_frame_y())});
     if (!currentNotes.empty()) {
         if (abs(whenNext()) <= cat.back()) {
             std::shared_ptr<poisonNote> ptr = std::dynamic_pointer_cast<poisonNote>(currentNotes.front());
@@ -47,12 +47,18 @@ void lane::press() {
                 std::cout << "Acid!" << std::endl;
             }
 
-            currentNotes.pop_front();
+            if (currentNotes.front()->midAnimation())
+                currentNotes.pop_front();
+            else {
+                currentNotes.front()->hit();
+            }
         }
     }
 }
 
 void lane::release() {
+    const spriteData &data = getSpriteData()[0].second[name + " press0001"];
+    //judge.move({2 * -static_cast<float>(data.get_frame_x()), 2 * -static_cast<float>(data.get_frame_y())});
     judge.setTextureRect(getSpriteData()[0].second["arrow_" + name + "0000"].get_texture_rect());
 }
 

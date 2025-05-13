@@ -125,7 +125,6 @@ void track::restart() {
 
 void track::start() {
     sf::RenderWindow& window = game::getWindow();
-    sf::Clock clock;
 
     constexpr int gap = 150, start = 1100;
     std::map<sf::Keyboard::Key, lane> lanes = {
@@ -136,7 +135,8 @@ void track::start() {
     };
 
     restart();
-    lanes.at(sf::Keyboard::Key::D).addNote<poisonNote>();
+    lanes.at(sf::Keyboard::Key::D).addNote<simpleNote>();
+    window.setKeyRepeatEnabled(false);
 
     while (window.isOpen() && instrumental.getStatus() != sf::SoundSource::Status::Stopped) {
         while (auto event = window.pollEvent()) {
@@ -147,7 +147,9 @@ void track::start() {
                 auto code = event->getIf<sf::Event::KeyPressed>()->code;
                 auto it = lanes.find(code);
                 if (it != lanes.end()) {
-                    it->second.addNote<simpleNote>();
+                    if (it->first != sf::Keyboard::Key::K)
+                        it->second.addNote<simpleNote>();
+                    else it->second.addNote<simpleNote>();
                     it->second.press();
                 }
                 if (code == sf::Keyboard::Key::Escape) {

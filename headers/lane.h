@@ -15,11 +15,11 @@
 #include "game.h"
 
 class lane {
-    std::deque<std::shared_ptr<note>> currentNotes;
+    std::deque<std::shared_ptr<note>> currentNotes, unreachableNotes;
     std::string name;
     simpleNote judge;
 
-    const double pxPerMsec = 1;
+    const double pxPerMsec = 1.5;
     const std::vector<int> cat = {14, 30, 60, 120};
 
 public:
@@ -34,7 +34,7 @@ public:
     template<class T>
     void addNote() {
         T note(judge.getTexture());
-        note.setTextureRect(lane::getSpriteData()[0].second[name + "0000"].get_texture_rect());
+        note.setTextureRect(getSpriteData()[0].second[name + "0000"].get_texture_rect());
         note.setPosition({judge.getPosition().x, -100});
         currentNotes.emplace_back(std::make_shared<T>(note));
     }
