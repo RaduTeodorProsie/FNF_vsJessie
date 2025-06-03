@@ -51,14 +51,18 @@ public:
     lane(const std::string &lane_name,
          int X,
          const sf::Texture& atlas,
+         const sf::IntRect& judgeDefaultRect,
+         const sf::IntRect& noteDefaultRect,
          double pixels_per_ms = 1.5,
          int judge_ms_per_frame = 150)
         : name(lane_name),
-          judge(atlas, nonStaticStorage(), judge_ms_per_frame),
+          judge(atlas, nonStaticStorage({{"default", {judgeDefaultRect}}}), judge_ms_per_frame),
           textureAtlas(atlas),
           pxPerMsec(pixels_per_ms)
     {
         judge.setPosition({static_cast<float>(X), 850});
+        // Set default animation for simpleNote static storage
+        staticStorage<LaneSimpleNoteTag_T>::set({{"default", {noteDefaultRect}}});
     }
 
     void draw(sf::RenderTarget& target) const override {
@@ -111,6 +115,8 @@ public:
         note.setPosition({0, yPosition});
         currentNotes.emplace_back(std::move(note));
     }
+
+    Judge& getJudge() { return judge; }
 };
 
 #endif // LANE_H

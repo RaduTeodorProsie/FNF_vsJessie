@@ -127,11 +127,31 @@ void track::start() {
     sf::RenderWindow& window = game::getWindow();
 
     constexpr int gap = 150, start = 1100;
+    auto &spriteDataVec = game::getSpriteData();
+    auto &texture = spriteDataVec[0].first;
+    auto &atlas = spriteDataVec[0].second;
+
     std::map<sf::Keyboard::Key, std::unique_ptr<bLane>> lanes;
-    lanes[sf::Keyboard::Key::D] = std::make_unique<lane<tagType::Left>>("left", start, game::getSpriteData()[0].first);
-    lanes[sf::Keyboard::Key::F] = std::make_unique<lane<tagType::Down>>("down", start + gap, game::getSpriteData()[0].first);
-    lanes[sf::Keyboard::Key::J] = std::make_unique<lane<tagType::Up>>("up", start + 2*gap, game::getSpriteData()[0].first);
-    lanes[sf::Keyboard::Key::K] = std::make_unique<lane<tagType::Right>>("right", start + 3*gap, game::getSpriteData()[0].first);
+    lanes[sf::Keyboard::Key::D] = std::make_unique<lane<tagType::Left>>(
+        "left", start, texture,
+        atlas["arrow_left0000"].get_texture_rect(),
+        atlas["left0000"].get_texture_rect()
+    );
+    lanes[sf::Keyboard::Key::F] = std::make_unique<lane<tagType::Down>>(
+        "down", start + gap, texture,
+        atlas["arrow_down0000"].get_texture_rect(),
+        atlas["down0000"].get_texture_rect()
+    );
+    lanes[sf::Keyboard::Key::J] = std::make_unique<lane<tagType::Up>>(
+        "up", start + 2*gap, texture,
+        atlas["arrow_up0000"].get_texture_rect(),
+        atlas["up0000"].get_texture_rect()
+    );
+    lanes[sf::Keyboard::Key::K] = std::make_unique<lane<tagType::Right>>(
+        "right", start + 3*gap, texture,
+        atlas["arrow_right0000"].get_texture_rect(),
+        atlas["right0000"].get_texture_rect()
+    );
 
     restart();
     lanes.at(sf::Keyboard::Key::D)->addLaneSimpleNote();
