@@ -60,11 +60,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         xml-parser/loadAtlas.cpp
         headers/spriteData.h
         xml-parser/loadAtlas.h
-        sources/lane.cpp
         headers/lane.h
-        headers/simpleNote.h
-        headers/poisonNote.h
-        headers/HeartNote.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

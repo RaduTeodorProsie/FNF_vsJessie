@@ -14,6 +14,11 @@ sf::RenderWindow &game::getWindow() {
     return window;
 }
 
+std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> &game::getSpriteData(){
+    static std::vector<std::pair<sf::Texture, std::map<std::string, spriteData>>> xmlInfo;
+    return xmlInfo;
+}
+
 game::game() {
     sf::RenderWindow &window = game::getWindow();
     window.create(sf::VideoMode({1920u, 1080u}), "FNF", sf::Style::None, sf::State::Fullscreen);
@@ -39,16 +44,17 @@ game::game() {
     }
 }
 
+sf::SoundBuffer poisonNote::acid;
 void game::start() {
     try {
-        auto &notes = lane::getSpriteData();
+        auto &notes = getSpriteData();
         for (const std::string &name: {"notes", "poison_notes", "heart_note"})
             notes.emplace_back(sf::Texture("assets/shared/notes/" + name + ".png"),
                                parseTextureAtlasPugi("assets/shared/notes/" + name + ".xml"));
 
         if (sf::SoundBuffer loveNote; !loveNote.loadFromFile("assets/shared/notes/loveNote.ogg"))
             throw AssetException("Failed to load love note");
-        if (sf::SoundBuffer poisonNote; !poisonNote.loadFromFile("assets/shared/notes/acid.ogg"))
+        if (!poisonNote::getSoundBuffer().loadFromFile("assets/shared/notes/acid.ogg"))
             throw AssetException("Failed to load poison note");
     }
     catch (const AssetException &e) {
@@ -60,7 +66,8 @@ void game::start() {
         std::exit(static_cast<int>(ExitCode::UNKNOWN_ERROR));
     }
 
-    std::cout << lane::getSpriteData().size() << std::endl;
+
+    std::cout << getSpriteData().size() << std::endl;
     std::vector<sf::String> track_names;
     track_names.reserve(tracks.size() + 1);
     for (const auto &track: tracks) {
@@ -68,13 +75,15 @@ void game::start() {
     }
 
     track_names.emplace_back("Exit game");
-    while (getWindow().isOpen()) {
+    auto &window = getWindow();
+    window.setKeyRepeatEnabled(false);
+    while (window.isOpen()) {
         menu main_menu(track_names);
         const std::optional<sf::String> want = main_menu.getOption();
 
         if (!want.has_value()) return;
         if (*want == "Exit game") {
-            getWindow().close();
+            window.close();
             return;
         }
 

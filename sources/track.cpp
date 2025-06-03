@@ -127,17 +127,14 @@ void track::start() {
     sf::RenderWindow& window = game::getWindow();
 
     constexpr int gap = 150, start = 1100;
-    std::map<sf::Keyboard::Key, lane> lanes = {
-        {sf::Keyboard::Key::D, lane("left",  start)},
-        {sf::Keyboard::Key::F, lane("down",  start + gap)},
-        {sf::Keyboard::Key::J, lane("up",    start + 2*gap)},
-        {sf::Keyboard::Key::K, lane("right", start + 3*gap)}
-    };
+    std::map<sf::Keyboard::Key, std::unique_ptr<bLane>> lanes;
+    lanes[sf::Keyboard::Key::D] = std::make_unique<lane<tagType::Left>>("left", start, game::getSpriteData()[0].first);
+    lanes[sf::Keyboard::Key::F] = std::make_unique<lane<tagType::Down>>("down", start + gap, game::getSpriteData()[0].first);
+    lanes[sf::Keyboard::Key::J] = std::make_unique<lane<tagType::Up>>("up", start + 2*gap, game::getSpriteData()[0].first);
+    lanes[sf::Keyboard::Key::K] = std::make_unique<lane<tagType::Right>>("right", start + 3*gap, game::getSpriteData()[0].first);
 
     restart();
-    lanes.at(sf::Keyboard::Key::D).addNote<simpleNote>();
-    window.setKeyRepeatEnabled(false);
-
+    lanes.at(sf::Keyboard::Key::D)->addLaneSimpleNote();
     while (window.isOpen() && instrumental.getStatus() != sf::SoundSource::Status::Stopped) {
         while (auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -148,9 +145,9 @@ void track::start() {
                 auto it = lanes.find(code);
                 if (it != lanes.end()) {
                     if (it->first != sf::Keyboard::Key::K)
-                        it->second.addNote<simpleNote>();
-                    else it->second.addNote<simpleNote>();
-                    it->second.press();
+                        it->second->addLaneSimpleNote();
+                    else it->second->addLaneSimpleNote();
+                    it->second->press();
                 }
                 if (code == sf::Keyboard::Key::Escape) {
                     voices.pause();
@@ -176,7 +173,7 @@ void track::start() {
                 auto code = event->getIf<sf::Event::KeyReleased>()->code;
                 auto it = lanes.find(code);
                 if (it != lanes.end())
-                    it->second.release();
+                    it->second->release();
             }
         }
 
@@ -185,8 +182,8 @@ void track::start() {
         sf::Time dt = clock.restart();
         window.clear();
         for (auto& ln : lanes | std::views::values) {
-            ln.update(dt);
-            ln.draw();
+            ln->update(dt);
+            ln->draw(window);
         }
         window.display();
     }

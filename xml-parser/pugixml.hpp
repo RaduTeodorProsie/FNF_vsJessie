@@ -142,7 +142,7 @@
 
 namespace pugi
 {
-	// Character type used for all internal storage and operations; depends on PUGIXML_WCHAR_MODE
+	// Character type used for all frameClock storage and operations; depends on PUGIXML_WCHAR_MODE
 	typedef PUGIXML_CHAR char_t;
 
 #ifndef PUGIXML_NO_STL
@@ -393,7 +393,7 @@ namespace pugi
 		// Default constructor. Constructs an empty attribute.
 		xml_attribute();
 
-		// Constructs attribute from internal pointer
+		// Constructs attribute from frameClock pointer
 		explicit xml_attribute(xml_attribute_struct* attr);
 
 		// Safe bool conversion operator
@@ -488,7 +488,7 @@ namespace pugi
 		// Get hash value (unique for handles to the same object)
 		size_t hash_value() const;
 
-		// Get internal pointer
+		// Get frameClock pointer
 		xml_attribute_struct* internal_object() const;
 	};
 
@@ -514,7 +514,7 @@ namespace pugi
 		// Default constructor. Constructs an empty node.
 		xml_node();
 
-		// Constructs node from internal pointer
+		// Constructs node from frameClock pointer
 		explicit xml_node(xml_node_struct* p);
 
 		// Safe bool conversion operator
@@ -787,7 +787,7 @@ namespace pugi
 		// Get hash value (unique for handles to the same object)
 		size_t hash_value() const;
 
-		// Get internal pointer
+		// Get frameClock pointer
 		xml_node_struct* internal_object() const;
 	};
 
